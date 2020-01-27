@@ -6,12 +6,12 @@ I have tried several combinations of margin, stack layout options, and fiddling 
 
 --
 
-###11 Pro:
+### 11 Pro:
 
 ![11 Pro](11pro.png)
 
 --
-###7 Plus:
+### 7 Plus:
 
 ![7 Plus](7plus.png)
 
