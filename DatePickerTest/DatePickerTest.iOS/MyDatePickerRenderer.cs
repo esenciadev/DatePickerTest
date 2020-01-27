@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using CoreGraphics;
 using DatePickerTest;
 using DatePickerTest.iOS;
@@ -8,7 +7,6 @@ using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ResolutionGroupName("DatePickerTest")]
 [assembly: ExportRenderer(typeof(MyDatePicker), typeof(MyDatePickerRenderer))]
 namespace DatePickerTest.iOS
 {
@@ -29,10 +27,12 @@ namespace DatePickerTest.iOS
             {
                 if (Control == null)
                 {
-                    _datePicker = new UIDatePicker(new CGRect(e.NewElement.Bounds.X,
-                                                              e.NewElement.Bounds.Y,
-                                                              320,
-                                                              216));
+                    _datePicker = new UIDatePicker(new CGRect(
+                        e.NewElement.Bounds.X,
+                        e.NewElement.Bounds.Y,
+                        e.NewElement.Bounds.Width,
+                        e.NewElement.Bounds.Height
+                     ));
                     _datePicker.Mode = UIDatePickerMode.DateAndTime;
                     _datePicker.Date = (NSDate) Element.Date;
                     _datePicker.MaximumDate = (NSDate) Element.Date.AddDays(1);
@@ -49,16 +49,9 @@ namespace DatePickerTest.iOS
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
-            if (disposing && _datePicker != null)
+            if (disposing)
             {
-                if (Device.IsInvokeRequired)
-                {
-                    Device.BeginInvokeOnMainThread(() => { _datePicker.ValueChanged -= DatePickerOnValueChanged; });
-                }
-                else
-                {
-                    _datePicker.ValueChanged -= DatePickerOnValueChanged;
-                }
+                _datePicker.ValueChanged -= DatePickerOnValueChanged;
             }
         }
 
@@ -66,24 +59,8 @@ namespace DatePickerTest.iOS
         {
             var date = (DateTime) _datePicker.Date;
 
-            if (Device.IsInvokeRequired)
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    Element.Date = date;
-                    Element.DateChangedCommand?.Execute(date);
-                });
-            }
-            else
-            {
-                Element.Date = date;
-                Element.DateChangedCommand?.Execute(date);
-            }
-        }
-
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            base.OnElementPropertyChanged(sender, e);
+            Element.Date = date;
+            Element.DateChangedCommand?.Execute(date);
         }
     }
 }
